@@ -1,0 +1,13 @@
+Metadata-Version: 1.1
+Name: ClusterUtils
+Version: 0.1.0
+Summary: A clustering utility package
+Home-page: UNKNOWN
+Author: Mark Hutchens
+Author-email: mhutchens@brandeis.edu
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3

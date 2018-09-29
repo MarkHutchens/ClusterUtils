@@ -4,20 +4,20 @@ from ClusterUtils import InternalValidator
 from ClusterUtils import ExternalValidator
 
 
-db = DBScan(eps=0.3, min_points=10, csv_path='rockets.csv')
+db = DBScan(eps=0.3, min_points=10, csv_path='Datasets/rockets.csv') #rockets default
 db.fit_from_csv()
 db.show_plot()
 db.save_plot()
 db.save_csv()
 
-km = KMeans(init='random', n_clusters=3, csv_path='three_globs.csv')
+km = KMeans(init='random', n_clusters=3, csv_path='Datasets/three_globs.csv')
 km.fit_from_csv()
 km.show_plot()
 km.save_plot()
 km.save_csv()
 
 
-km = KMeans(init='random', csv_path='well_separated.csv')
+km = KMeans(init='random', csv_path='Datasets/well_separated.csv')
 dfs = []
 cs = []
 for i in range(2, 10):
@@ -36,7 +36,7 @@ iv.save_silhouette_plot()
 
 iv.save_csv(cvnn=True, silhouette=True)
 
-db = DBScan(eps=0.3, min_points=10, csv_path='rockets.csv')
+db = DBScan(eps=0.3, min_points=10, csv_path='Datasets/rockets.csv')
 data = db.fit_predict_from_csv()
 
 ev = ExternalValidator(data)

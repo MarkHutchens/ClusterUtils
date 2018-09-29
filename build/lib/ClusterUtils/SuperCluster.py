@@ -36,7 +36,6 @@ class SuperCluster(object):
             return self.fit(X).labels
 
     def fit_from_csv(self):
-        print(self.csv_path)
         df = pd.read_csv(self.csv_path, index_col=0)
         if self.keep_dataframe:
             self.DF = df

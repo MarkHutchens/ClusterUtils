@@ -4,89 +4,16 @@ import time
 from ClusterUtils.SuperCluster import SuperCluster
 from ClusterUtils.ClusterPlotter import _plot_generic_
 
-'''
-Looked at Wikipedia: https://en.wikipedia.org/wiki/DBSCAN
+def dbscan(X, eps=1, min_points=10, verbose=False):
 
-How DBSCAN works:
-
-Find cores and borders and noise
-    cores are ones close enough to a bunch of other points. ie in a dense region
-
-'''
-
-debug = True
-
-def distance(point1, point2, size):
-    #so many features, so little time.
-    dis = 0
-    for feat in range(size):
-        dis += (point1[feat] - point2[feat]) **2
-    return dis
-
-def range_query(X, point1, core, eps = 1):
-    #Name taken from Wikipedia. Easier to understand dbscan with this extracted
-    shape = X.shape
-    neighbors = [] #To keep track of neighbors
-
-
-    count = 0 # Easier -1 than handling counting itself
-    if debug: print(X[point1], end=': ')
-    for point2 in range(shape[0]):
-        if point1 != point2:
-            if distance(X[point1], X[point2], shape[1]) <= eps:
-                count += 1
-                neighbors.append(point2)
-    if debug: print(count)
-    return(neighbors)
-
-
-
-def dbscan(X: np.ndarray, eps=1, min_points=10, verbose=False):
-    # eps = max distance between same-cluster points
-    # min-points is the cutoff for a dense region
     # Implement.
 
-    # Input: np.ndarray of samples, X
+    # Input: np.darray of samples
 
     # Return a array or list-type object corresponding to the predicted cluster
     # numbers, e.g., [0, 0, 0, 1, 1, 1, 2, 2, 2]
-    eps = eps ** 2 # Otherwise we'd need to square root every distance
-    shape = X.shape
-    core = [None] * X.shape[0]
 
-    cluster = 0 #Will increment with each cluster we find
-
-    for point1 in range(shape[0]):
-        #First off, determine if each point is core.
-        if core[point1] != None: #If we've already labelled it, don't bother again.
-            continue
-        neighbors = range_query(X, point1, core, eps) #get a list of neighbors
-        count = len(neighbors)
-
-        if count >= min_points: #Noice, got a core point!
-            #core[point1] = 1
-            #continue #Sanity check that I identify core points accurately
-
-            cluster += 1
-            core[point1] = cluster
-            print(len(neighbors), end = ' to ')
-            for n in neighbors:
-                if core[n] == 0:
-                    core[n] = cluster #Noise to edge, w00t
-                elif core[n] != None:
-                    continue
-                #Now the wonky bit. We append points to the neighbors list!
-                core[n] = cluster
-                n_neighbors = range_query(X, n, core, eps)
-                #print(neighbors)
-                if len(n_neighbors) >= min_points:
-                    neighbors.extend(n_neighbors)
-            print(len(neighbors))
-
-        else: # Noise
-            core[point1] = 0
-    if debug: print(len(core), core)
-    return core
+    return None
 
 
 # The code below is completed for you.
