@@ -3,6 +3,7 @@ import time
 from ClusterUtils.ClusterPlotter import _plot_cvnn_
 from ClusterUtils.ClusterPlotter import _plot_silhouette_
 
+# http://www.cs.kent.edu/~jin/DM08/ClusterValidation.pdf
 
 def tabulate_silhouette(datasets, cluster_nums):
 
@@ -16,6 +17,18 @@ def tabulate_silhouette(datasets, cluster_nums):
     # cluster_nums = [2, 3, 4]
 
     # Return a pandas DataFrame corresponding to the results.
+
+    #s = (b - a) / max(a, b)
+    # a is average distance to ingroup
+    # b is average to closest outgroup. (so second-best)
+    # 0-1, want close to 1. Source, class slides
+    # Average it then.
+    best = None
+    print(datasets)
+    #for d in range(len(datasets)):
+
+
+     #   sil = (b - a) / max(a, b)
 
     return None
 

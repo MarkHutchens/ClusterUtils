@@ -11,10 +11,12 @@ How DBSCAN works:
 
 Find cores and borders and noise
     cores are ones close enough to a bunch of other points. ie in a dense region
+When you find a core point:
+    Jump to all its neighbors to see if they are core points too. Repeat
 
 '''
 
-debug = True
+debug = False
 
 def distance(point1, point2, size):
     #so many features, so little time.
@@ -27,8 +29,6 @@ def range_query(X, point1, core, eps = 1):
     #Name taken from Wikipedia. Easier to understand dbscan with this extracted
     shape = X.shape
     neighbors = [] #To keep track of neighbors
-
-
     count = 0 # Easier -1 than handling counting itself
     if debug: print(X[point1], end=': ')
     for point2 in range(shape[0]):
@@ -64,12 +64,9 @@ def dbscan(X: np.ndarray, eps=1, min_points=10, verbose=False):
         count = len(neighbors)
 
         if count >= min_points: #Noice, got a core point!
-            #core[point1] = 1
-            #continue #Sanity check that I identify core points accurately
-
             cluster += 1
             core[point1] = cluster
-            print(len(neighbors), end = ' to ')
+            if debug: print(len(neighbors), end = ' to ')
             for n in neighbors:
                 if core[n] == 0:
                     core[n] = cluster #Noise to edge, w00t
@@ -81,8 +78,7 @@ def dbscan(X: np.ndarray, eps=1, min_points=10, verbose=False):
                 #print(neighbors)
                 if len(n_neighbors) >= min_points:
                     neighbors.extend(n_neighbors)
-            print(len(neighbors))
-
+            if debug: print(len(neighbors))
         else: # Noise
             core[point1] = 0
     if debug: print(len(core), core)
