@@ -3,27 +3,35 @@ from ClusterUtils import KMeans
 from ClusterUtils import InternalValidator
 from ClusterUtils import ExternalValidator
 
+# Pycharm is running this and just adding 'Datasets/' was easier than messing with settings
 
+'''
 db = DBScan(eps=0.3, min_points=10, csv_path='Datasets/rockets.csv') #rockets default
 db.fit_from_csv()
 db.show_plot()
-db.save_plot()
+db.save_plot('MarkResults/MarkRockets')
 db.save_csv()
-
+'''
+'''
 km = KMeans(init='random', n_clusters=3, csv_path='Datasets/three_globs.csv')
 km.fit_from_csv()
 km.show_plot()
 km.save_plot()
 km.save_csv()
-
+'''
 
 km = KMeans(init='random', csv_path='Datasets/well_separated.csv')
+
+
+
 dfs = []
 cs = []
 for i in range(2, 10):
     km.n_clusters = i # IMPORTANT -- Update the number of clusters to run.
     dfs.append(km.fit_predict_from_csv())
     cs.append(i)
+
+    km.show_plot()
 
 iv = InternalValidator(dfs, cluster_nums=cs)
 iv.make_cvnn_table()

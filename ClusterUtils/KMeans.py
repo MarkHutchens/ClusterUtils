@@ -42,17 +42,18 @@ def get_min_and_max(X):
     print(to_return)
     return to_return
 
-def fitness(X, centroids, labels):
+def silhouette(X, centroids, labels):
     to_return = 0 # Where we will be putting the distance
     # s = (b – a) / max(a,b)
     # a is avg distance to in-cluster
     # Extraordinarily inefficient because of being O(N^2)
+    # Considering only working off a sample of the data to cut down on time.
 
     for point1 in range(X.shape[0]):
         a = 0
         a_count = 0
-        b_list = [0] * len(centroids)
-        b_counts = [0] * len(centroids) #gotta count the number of points per outgroup yo
+        b_list = [0] * centroids
+        b_counts = [0] * centroids #gotta count the number of points per outgroup yo
         for point2 in range(X.shape[0]):
             if labels[point1] == labels[point2]:
                 a += distance(X[point1],X[point2])
@@ -134,7 +135,7 @@ def k_means(X, n_clusters=3, init='random', algorithm='lloyds', n_init=1, max_it
                     for dimension in range(X.shape[1]):
                         cur_centroids[centroid][dimension] = sums[centroid][dimension] / counts[centroid]
 
-            cur_inertia = fitness(X, cur_centroids, cur_labels)
+            cur_inertia = silhouette(X, len(cur_centroids), cur_labels)
             if inertia == -1 or cur_inertia < inertia:
                 inertia = cur_inertia
                 labels = cur_labels

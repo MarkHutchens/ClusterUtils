@@ -5,6 +5,47 @@ from ClusterUtils.ClusterPlotter import _plot_silhouette_
 
 # http://www.cs.kent.edu/~jin/DM08/ClusterValidation.pdf
 
+def distance(point, centroid):
+    # Euclidean distance. No root because it will always be the same.
+    dist = 0
+    for val in range(len(point)):
+        dist += (point[val] - centroid[val]) ** 2
+    return dist
+
+def silhouette(X, centroids, labels):
+    # This one creates a column for the pandas dataframe
+    # So not averages.
+
+
+    to_return = [] # Where we will be putting the distance
+    # s = (b – a) / max(a,b)
+    # a is avg distance to in-cluster
+    # Extraordinarily inefficient because of being O(N^2)
+    # Considering only working off a sample of the data to cut down on time.
+
+    for point1 in range(X.shape[0]):
+        a = 0
+        a_count = 0
+        b_list = [0] * centroids
+        b_counts = [0] * centroids #gotta count the number of points per outgroup yo
+        for point2 in range(X.shape[0]):
+            if labels[point1] == labels[point2]:
+                a += distance(X[point1],X[point2])
+                a_count += 1
+            else:
+                b_list[labels[point2]] += distance(X[point1],X[point2])
+                b_counts[labels[point2]] += 1
+        a = a/a_count
+        b_list.pop(labels[point1]) # Avoid the 0/0 from ingroup
+        b_counts.pop(labels[point1])
+
+        b = min([b_list[x] / (b_counts[x] + 1) for x in range(len(b_list))])
+
+        s = (b - a) / max(a,b)
+        to_return.append(s)
+    #to_return = to_return / X.shape[0]
+    return to_return
+
 def tabulate_silhouette(datasets, cluster_nums):
 
     # Implement.
@@ -23,14 +64,25 @@ def tabulate_silhouette(datasets, cluster_nums):
     # b is average to closest outgroup. (so second-best)
     # 0-1, want close to 1. Source, class slides
     # Average it then.
-    best = None
-    print(datasets)
-    #for d in range(len(datasets)):
 
+    # I wrote the thing in the KMeans file first,
+    sil = None
+    for d in range(len(datasets)):
+        sil = silhouette(datasets[d][:-1], cluster_nums[d], datasets[d][-1])
+
+
+    cols = ['Clusters', 'SILHOUETTE_IDX']
+    df = pd.DataFrame(data=sil,
+                  index=range(datasets[0].shape[0]),
+                  columns=cols)
+    return df
+
+
+
+    #plt.plot(silhouette_table['CLUSTERS'], silhouette_table['SILHOUETTE_IDX'], label='Silhouette Index')
 
      #   sil = (b - a) / max(a, b)
 
-    return None
 
 def tabulate_cvnn(datasets, cluster_nums, k_vals):
 
